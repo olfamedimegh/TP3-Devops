@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'olfamedimegh/mon-app' // ton image sur Docker Hub
+        DOCKER_IMAGE = 'olfa2002/mon-app' // ton image sur Docker Hub
     }
 
     stages {
