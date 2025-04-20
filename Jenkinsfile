@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Cloner le dépôt') {
             steps {
-                git 'https://github.com/olfamedimegh/TP3-Devops.git'
+               git branch: 'main', url: 'https://github.com/olfamedimegh/TP3-Devops.git'
             }
         }
 
