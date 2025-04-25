@@ -8,3 +8,8 @@ service:
   port: 80
 
 containerPort: 3000
+
+# Ajout pour le serviceAccount
+serviceAccount:
+  create: false
+  name: ""
