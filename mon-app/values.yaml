@@ -9,7 +9,12 @@ service:
 
 containerPort: 3000
 
-# Ajout pour le serviceAccount
 serviceAccount:
   create: false
   name: ""
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls: []
