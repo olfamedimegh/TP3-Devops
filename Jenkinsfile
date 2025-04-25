@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'olfa2002/mon-app:latest'
         HELM_CHART_PATH = './mon-app'
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
+        HELM_BINARY = '/home/jenkins/helm/linux-amd64/helm'  // Full path to Helm
     }
 
     stages {
@@ -40,7 +41,7 @@ pipeline {
         stage('Déployer avec Helm') {
             steps {
                 script {
-                    sh "helm upgrade --install mon-app ${HELM_CHART_PATH} --set image.repository=${DOCKER_IMAGE.split(':')[0]} --set image.tag=${DOCKER_IMAGE.split(':')[1]}"
+                    sh "${HELM_BINARY} upgrade --install mon-app ${HELM_CHART_PATH} --set image.repository=${DOCKER_IMAGE.split(':')[0]} --set image.tag=${DOCKER_IMAGE.split(':')[1]}"
                 }
             }
         }
