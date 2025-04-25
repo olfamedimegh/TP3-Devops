@@ -1,0 +1,10 @@
+image:
+  repository: olfa2002/mon-app
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+
+containerPort: 3000

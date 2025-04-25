@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'olfa2002/mon-app' // ton image sur Docker Hub
+        DOCKER_IMAGE = 'olfa2002/mon-app:latest'
+        HELM_CHART_PATH = './mon-app'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
     }
 
     stages {
         stage('Cloner le dépôt') {
             steps {
-               git branch: 'main', url: 'https://github.com/olfamedimegh/TP3-Devops.git'
+               git branch: 'main-with-helm', url: 'https://github.com/olfamedimegh/TP3-Devops.git'
             }
         }
 
@@ -25,21 +27,20 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(
                         credentialsId: 'dockerhub-creds',
-                        usernameVariable: 'DOCKER_USER', 
-                        passwordVariable: 'DOCKER_PASS')]) 
-                    {
-                        sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                        sh "docker push olfa2002/mon-app"
+                        passwordVariable: 'DOCKER_PASSWORD',
+                        usernameVariable: 'DOCKER_USERNAME'
+                    )]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        sh "docker push ${DOCKER_IMAGE}"
                     }
                 }
             }
         }
 
-        stage('Déployer sur Kubernetes') {
+        stage('Déployer avec Helm') {
             steps {
                 script {
-                    sh 'kubectl apply -f deployment.yaml'
-                    sh 'kubectl apply -f service.yaml'
+                    sh "helm upgrade --install mon-app ${HELM_CHART_PATH} --set image.repository=${DOCKER_IMAGE.split(':')[0]} --set image.tag=${DOCKER_IMAGE.split(':')[1]}"
                 }
             }
         }
